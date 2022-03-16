@@ -1,133 +1,125 @@
 <template>
     <div>
-        <div class="row lista_desbravadores_conteiner">
-                <div class="cabecalho">
-                        <div class="pesquisaBox">
-                        <input type="text" class="pesuisa_input" v-on:keyup.enter="pesquisarDbv()" v-model="campo_pesquisa">
-                        <button class="pesq_button" v-on:click="pesquisarDbv()"> pesquisar </button>
+        <div class="conteiner-principal">
+                <div class="row  lista_desbravadores_conteiner">
+                        <div class="cabecalho">
+                                <div class="pesquisaBox">
+                                <input type="text" class="pesuisa_input" v-on:keyup.enter="pesquisarDbv()" v-model="campo_pesquisa">
+                                <button class="pesq_button" v-on:click="pesquisarDbv()"> pesquisar </button>
+                                </div>
+                                <button class="btn" v-on:click="ocultarDiv">Cadastrar</button>
                         </div>
-                        <button class="btn" v-on:click="ocultarDiv">Cadastrar</button>
-                </div>
-                <div class="tabela">
-                    <div v-for="(lista,index0) in lista_dbvs" :key="index0" >
-                        
-                        <div v-if="index0 === pagina_atual">
-                            <div class="linha" v-for="(item,index) in lista" :key="index">
-                                    <div class="col-1">
-                                        <img :src="item.img" alt="">
-                                    </div>  
-                                    <div class="col-1">
-                                        {{item.nome}}
-                                        <span>cargo</span>
-                                    </div>  
-                                    <div class="col-1"><button  v-on:click="editarFormDbv(item,index)">editar</button></div>  
-                                    <div class="col-1"><button  v-on:click="excluirDbv(index)">excluir</button></div>  
+                        <div class="tabela">
+                            <div v-for="(lista,index0) in lista_dbvs" :key="index0" >
+                                
+                                <div v-if="index0 === pagina_atual">
+                                    <div class="linha" v-for="(item,index) in lista" :key="index">
+                                            <div class="col-1">
+                                                <img :src="item.img" alt="">
+                                            </div>  
+                                            <div class="col-1">
+                                                {{item.nome}}
+                                                <span>cargo</span>
+                                            </div>  
+                                            <div class="col-1"><button  v-on:click="editarFormDbv(item,index)">editar</button></div>  
+                                            <div class="col-1"><button  v-on:click="excluirDbv(index)">excluir</button></div>  
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <paginate
+                            :page-count=paginas_a_ser_paginadas
+                            :click-handler="funcao_paaginacao"
+                            :prev-text="'Prev'"
+                            :next-text="'Next'"
+                            :container-class="'ul_paginacao'"
+                            :page-class="'page-item'"
+                            >
+                        </paginate>
+                </div>
+                <div class="row conteiner_central ocultar_conteudo">
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                            <label for="nome">Nome</label>
+                            <input type="text" v-model="dbv.nome" name="nome" id="nome">
+                        </div>
                     </div>
-                    <!-- <div class="linha">
-                      <div class="col-1">
-                        <img src="@/assets/face4.jpg" alt="">    
-                      </div>  
-                      <div class="col-1">
-                          pessoa
-                          <span>cargo</span>
-                       </div>  
-                      <div class="col-1"><button>editar</button></div>  
-                      <div class="col-1"><button>excluir</button></div>  
-                    </div>                     -->
+                    <!-- <div class="col-12">
+                        <div class="form_conteiner">
+                            <label for="idade">Idade</label>
+                            <input type="text"  v-model="dbv.idade"  name="idade" id="idade">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                            <label for="sexo">Sexo</label>
+                            <input type="text"  v-model="dbv.sexo"  name="sexo" id="sexo">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="endereco">Endereço</label>
+                        <input type="text"  v-model="dbv.endereco"  name="endereco" id="endereco">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="complemento">Complemento</label>
+                        <input type="text"  v-model="dbv.complemento"  name="complemento" id="complemento">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="cidade">Cidade</label>
+                        <input type="text"  v-model="dbv.cidade"  name="cidade" id="cidade">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="numero">Numero</label>
+                        <input type="text"  v-model="dbv.numero"  name="numero" id="numero">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="bairro">Bairro</label>
+                        <input type="text"  v-model="dbv.bairro"  name="bairro" id="bairro">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="estado">Estados</label>
+                        <input type="text"  v-model="dbv.estado"  name="estado" id="estado">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="classe">Classes</label>
+                        <input type="text"  v-model="dbv.classe"  name="classe" id="classe">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="unidade">Unidades</label>
+                        <input type="text"  v-model="dbv.unidade"  name="unidade" id="unidade">
+                        </div>
+                    </div> -->
+                    <div class="col-12">
+                        <div class="form_conteiner">
+                        <label for="imagem">Imagem</label>
+                        <input type="text"  v-model="dbv.img"  name="imagem" id="imagem">
+                        </div>
+                    </div>            
+                    <div class="col-12">
+                        <div class="c_rodape_form">
+                        <button type="submit" v-if="!btn_editar" v-on:click="addDbv" >Cadastrar</button>
+                        <button type="submit" v-if="btn_editar"  v-on:click="editarDbv" >Editar</button>                
+                        <button class="voltar" type="button" v-on:click="voltar">Voltar</button>
+                        </div>
+                    </div>                                                                                                
                 </div>
-                <paginate
-                    :page-count=paginas_a_ser_paginadas
-                    :click-handler="funcao_paaginacao"
-                    :prev-text="'Prev'"
-                    :next-text="'Next'"
-                    :container-class="''"
-                    :page-class="''"
-                    class="ul_paginacao">
-                </paginate>
         </div>
-        <div class="row conteiner_central ocultar_conteudo">
-            <div class="col-12">
-                <div class="form_conteiner">
-                    <label for="nome">Nome</label>
-                    <input type="text" v-model="dbv.nome" name="nome" id="nome">
-                </div>
-            </div>
-            <!-- <div class="col-12">
-                <div class="form_conteiner">
-                    <label for="idade">Idade</label>
-                    <input type="text"  v-model="dbv.idade"  name="idade" id="idade">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                    <label for="sexo">Sexo</label>
-                    <input type="text"  v-model="dbv.sexo"  name="sexo" id="sexo">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="endereco">Endereço</label>
-                <input type="text"  v-model="dbv.endereco"  name="endereco" id="endereco">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="complemento">Complemento</label>
-                <input type="text"  v-model="dbv.complemento"  name="complemento" id="complemento">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="cidade">Cidade</label>
-                <input type="text"  v-model="dbv.cidade"  name="cidade" id="cidade">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="numero">Numero</label>
-                <input type="text"  v-model="dbv.numero"  name="numero" id="numero">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="bairro">Bairro</label>
-                <input type="text"  v-model="dbv.bairro"  name="bairro" id="bairro">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="estado">Estados</label>
-                <input type="text"  v-model="dbv.estado"  name="estado" id="estado">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="classe">Classes</label>
-                <input type="text"  v-model="dbv.classe"  name="classe" id="classe">
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="unidade">Unidades</label>
-                <input type="text"  v-model="dbv.unidade"  name="unidade" id="unidade">
-                </div>
-            </div> -->
-            <div class="col-12">
-                <div class="form_conteiner">
-                <label for="imagem">Imagem</label>
-                <input type="text"  v-model="dbv.img"  name="imagem" id="imagem">
-                </div>
-            </div>            
-            <div class="col-12">
-                <div class="c_rodape_form">
-                <button type="submit" v-if="!btn_editar" v-on:click="addDbv" >Cadastrar</button>
-                <button type="submit" v-if="btn_editar"  v-on:click="editarDbv" >Editar</button>                
-                <button class="voltar" type="button" v-on:click="voltar">Voltar</button>
-                </div>
-            </div>                                                                                                
-        </div>
+
     </div>
 </template>
 <script>
@@ -210,7 +202,7 @@ export default {
      },
      ocultarDiv(){
          this.$el.querySelector('.conteiner_central').classList.toggle('ocultar_conteudo');
-         this.$el.querySelector('.lista_desbravadores_conteiner').classList.toggle('ocultar_conteudo');
+        //  this.$el.querySelector('.lista_desbravadores_conteiner').classList.toggle('ocultar_conteudo');
      },
      voltar(){
          this.ocultarDiv();
@@ -301,27 +293,59 @@ export default {
  }
 }
 </script>
-<style scoped>
+<style lang="css" >
 *{
     margin:0;
     padding:0;
     box-sizing: margin-box;
 }
-.conteiner_central{
-    width: 30vw;
-    margin: 10vw auto;
-    transition: .3s;
-    transform-origin: top;
+.conteiner-principal{
+    position: relative;
 }
+.conteiner-principal > .row{
+    position: absolute;
+    top: 10px;
+    left: auto;
+
+}
+.lista_desbravadores_conteiner {
+    transform: translateX(32vw);
+}
+.conteiner_central
+{
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    margin: 10px auto;
+    transition: .3s;
+    transform: translateX(0vw);
+}
+
 .form_conteiner{
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
 }
+.form_conteiner input
+{
+    padding: 14px 35px;
+    border-radius: 0.5em;
+    outline: none;
+    font-size: 1.5em;
+    border: 1px solid #d6d6d6;
+    color: #4a4a4a;
+}
+.form_conteiner label
+{
+    padding: 10px 34px;
+    font-size: 1.5em;
+    font-family: sans-serif;
+    color: #3c3c3c;
+}
 
 .c_rodape_form{
     display: grid;
-    grid-template-columns: calc(2,1fr);
+    grid-template-columns: repeat(2,1fr);
 }
 button{
     padding: 1.2rem;
@@ -340,7 +364,6 @@ button{
     cursor: pointer;
 }
 
-/*cabecalho*/
 .pesquisaBox{
     display: flex;
     margin: 0.2rem
@@ -358,7 +381,7 @@ button{
     padding: 1em;
     font-size: 1.3rem;
 }
-/*tabela*/
+
 .tabela{
     margin: 0 auto;
     border: 0px solid #000;
@@ -379,30 +402,16 @@ button{
        
 }
 .ocultar_conteudo{
-    display: none;
-    transition: .5s;
-    transform-origin: top;
+    transform: translateX(100vw);
 }
-/*paginação*/
 
-.conteiner_paginacao {
-    display: flex;
-    border:1px solid red;
-    width: 25vw;
-    justify-content: space-around;
-    margin: 0 auto;
-}
-/* .conteiner_paginacao li
-{
-    border: 1px solid #d6d6d6;
-    padding: 1em;
-} */
 .item_paginacao
 {
     border: 1px solid #9f9f9f !important;
     list-style: none !important;
     padding: 1em !important;    
 }
+
 .ul_paginacao{
     background: #ffffff;
     display: flex;
@@ -414,21 +423,15 @@ button{
     padding:1em;
 
 }
-li.active {
-    border: 1px solid #2a0cb1;
-    background: #2a0cb1;
+.page-item {
+    padding: 1em !important;
+    transition: .5s;
+    transform-origin: top;
 }
 
-/* .conteiner_paginacao li {
-    border: 1px solid #9f9f9f;
-    padding: 1em;
+.page-item.active {
+    background-color: #4613d6 !important;
+    padding: 1em !important;
+    color: #fff !important;
 }
-
-.conteiner_paginacao .active {
-    background: #1126c5;
-}
-
-.conteiner_paginacao .disabled {
-    background: #b6b6b6;
-} */
 </style>
